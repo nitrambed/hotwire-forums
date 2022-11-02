@@ -2,7 +2,7 @@ module Discussions
     class PostsController < ApplicationController
         before_action :authenticate_user!
         before_action :set_discussion
-        before_action :set_post, only: [:show, :edit, :update]
+        before_action :set_post, only: [:show, :edit, :update, :destroy]
 
         def show
         end
@@ -32,6 +32,15 @@ module Discussions
                 format.html { render :new, status: :unprocessable_entity}
             end
            end
+        end
+
+        def destroy
+            @post.destroy
+
+            respond_to do |format|
+                format.turbo_stream { }
+                format.html { redirect_to @post.discussion, notice: "Post deleted" }
+            end
         end
     
         private
